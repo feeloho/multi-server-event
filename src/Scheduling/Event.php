@@ -57,7 +57,7 @@ class Event extends NativeEvent
     {
         $this->eventLost = true;
         try {
-            Cache::forever($this->key, Carbon::now());
+            $this->cache->forever($this->key, Carbon::now());
         } catch (\Exception $e) {
             $this->eventLost = false;
         }
@@ -92,8 +92,8 @@ class Event extends NativeEvent
      */
     public function ensureFinished($minutes)
     {
-        if (Cache::get($this->key) &&
-            Cache::get($this->key) < Carbon::now()->subMinutes($minutes) &&
+        if ($this->cache->has($this->key) &&
+            $this->cache->get($this->key) < Carbon::now()->subMinutes($minutes) &&
             $this->clearMultiserver()
         ) {
             event(new EnsureCleanUpExecuted($this->command));
@@ -108,7 +108,7 @@ class Event extends NativeEvent
     public function clearMultiserver()
     {
         if ($this->key) {
-            Cache::delete($this->key);
+            $this->cache->forget($this->key);
         }
         return true;
     }

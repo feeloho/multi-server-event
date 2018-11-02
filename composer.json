@@ -10,12 +10,12 @@
     },
     "autoload": {
         "psr-4": {
-            "feeloho\\MultiServerEvent\\": "src/"
+            "Feeloho\\MultiServerEvent\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "feeloho\\MultiServerEvent\\": "tests"
+            "Feeloho\\MultiServerEvent\\": "tests"
         }
     },
     "require-dev": {
