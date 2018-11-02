@@ -1,5 +1,5 @@
 <?php
-namespace feeloho\MultiServerEvent\Events;
+namespace Feeloho\MultiServerEvent\Events;
 
 use Illuminate\Queue\SerializesModels;
 /**

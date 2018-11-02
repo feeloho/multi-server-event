@@ -1,6 +1,6 @@
 <?php
 
-namespace feeloho\MultiServerEvent\Scheduling;
+namespace Feeloho\MultiServerEvent\Scheduling;
 
 interface Mutex
 {

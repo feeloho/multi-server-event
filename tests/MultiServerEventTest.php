@@ -9,8 +9,8 @@ class MultiServerEventTest extends TestCase {
      */
     public function it_initializes_the_schedule()
     {
-        $schedule = new feeloho\MultiServerEvent\Scheduling\Schedule(app()[Illuminate\Contracts\Cache\Repository::class]);
-        $this->assertTrue($schedule instanceof feeloho\MultiServerEvent\Scheduling\Schedule);
+        $schedule = new Feeloho\MultiServerEvent\Scheduling\Schedule(app()[Illuminate\Contracts\Cache\Repository::class]);
+        $this->assertTrue($schedule instanceof Feeloho\MultiServerEvent\Scheduling\Schedule);
 
         $result = $schedule->command('inspire')
             ->daily()

@@ -1,14 +1,14 @@
 <?php
-namespace feeloho\MultiServerEvent\Scheduling;
+namespace Feeloho\MultiServerEvent\Scheduling;
 
-use Illuminate\Console\Scheduling\CacheMutex;
 use Illuminate\Console\Scheduling\Schedule as NativeSchedule;
+use Illuminate\Contracts\Cache\Repository as Cache;
 
 class Schedule extends NativeSchedule
 {
 
     /**
-     * Add a new command event to the schedule.
+     * 添加新的命令
      *
      * @param  string  $command
      * @param  array  $parameters
@@ -19,7 +19,7 @@ class Schedule extends NativeSchedule
         if (count($parameters)) {
             $command .= ' '.$this->compileParameters($parameters);
         }
-        $this->events[] = $event = new Event(app()->make(CacheMutex::class), $command);
+        $this->events[] = $event = new Event(app()->make(Cache::class), $command);
         return $event;
     }
 }
