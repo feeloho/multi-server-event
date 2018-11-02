@@ -2,8 +2,6 @@
 
 use Orchestra\Testbench\TestCase;
 
-require __DIR__.'/../vendor/autoload.php';
-
 class MultiServerEventTest extends TestCase {
 
     /**
