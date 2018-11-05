@@ -20,6 +20,8 @@ class Event extends NativeEvent
      */
     protected $key;
 
+    protected $cacheMutex;
+
     public $eventLost = false;
 
     /**
@@ -32,6 +34,7 @@ class Event extends NativeEvent
     public function __construct(CacheMutex $cacheMutex, $command)
     {
         parent::__construct($cacheMutex, $command);
+        $this->cacheMutex = $cacheMutex;
         $this->key = $this->getKey();
         $this->then(function() {
             $this->clearMultiserver();
@@ -57,7 +60,7 @@ class Event extends NativeEvent
     {
         $this->eventLost = true;
         try {
-            $this->cache->forever($this->key, Carbon::now());
+            $this->cacheMutex->cache->forever($this->key, Carbon::now());
         } catch (\Exception $e) {
             $this->eventLost = false;
         }
@@ -92,8 +95,8 @@ class Event extends NativeEvent
      */
     public function ensureFinished($minutes)
     {
-        if ($this->cache->has($this->key) &&
-            $this->cache->get($this->key) < Carbon::now()->subMinutes($minutes) &&
+        if ($this->cacheMutex->cache->has($this->key) &&
+            $this->cacheMutex->cache->get($this->key) < Carbon::now()->subMinutes($minutes) &&
             $this->clearMultiserver()
         ) {
             event(new EnsureCleanUpExecuted($this->command));
@@ -108,7 +111,7 @@ class Event extends NativeEvent
     public function clearMultiserver()
     {
         if ($this->key) {
-            $this->cache->forget($this->key);
+            $this->cacheMutex->cache->forget($this->key);
         }
         return true;
     }
