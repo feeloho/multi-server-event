@@ -22,7 +22,7 @@ class Event extends NativeEvent
 
     protected $cacheMutex;
 
-    public $eventLost = false;
+    public $eventLost = true;
 
     /**
      * 创建事件实例
@@ -41,8 +41,7 @@ class Event extends NativeEvent
         });
     }
     /**
-     * 创建多服务器中命令互斥锁
-     * at the same time.
+     * 设置服务器互斥锁
      * @return $this
      */
     public function withoutOverlappingMultiServer()
@@ -53,13 +52,13 @@ class Event extends NativeEvent
     }
 
     /**
-     * 设置命令锁
-     * @return boolean true if we want to skip
+     * 设置命令锁(true跳过)
+     * @return boolean
      */
     public function skipMultiserver()
     {
-        $this->eventLost = true;
         try {
+            if ($this->cacheMutex->cache->has($this->key)) throw new \Exception('command cache key exists');
             $this->cacheMutex->cache->forever($this->key, Carbon::now());
         } catch (\Exception $e) {
             $this->eventLost = false;
@@ -68,6 +67,7 @@ class Event extends NativeEvent
     }
 
     /**
+     * 获取事件命令key
      * @return string
      */
     private function getKey()
@@ -105,7 +105,7 @@ class Event extends NativeEvent
     }
 
     /**
-     * 清理服务器锁
+     * 清除互斥锁
      * @return boolean
      */
     public function clearMultiserver()
