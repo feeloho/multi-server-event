@@ -3,7 +3,7 @@ namespace Feeloho\MultiServerEvent\Scheduling;
 
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Event as NativeEvent;
-use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Console\Scheduling\CacheMutex;
 use Feeloho\MultiServerEvent\Events\EnsureCleanUpExecuted;
 
 class Event extends NativeEvent
@@ -25,13 +25,13 @@ class Event extends NativeEvent
     /**
      * 创建事件实例
      *
-     * @param Cache $cache
+     * @param Mutex $cacheMutex
      * @param  string $command
      * @throws \RuntimeException
      */
-    public function __construct(Cache $cache, $command)
+    public function __construct(CacheMutex $cacheMutex, $command)
     {
-        parent::__construct($cache, $command);
+        parent::__construct($cacheMutex, $command);
         $this->key = $this->getKey();
         $this->then(function() {
             $this->clearMultiserver();
